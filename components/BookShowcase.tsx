@@ -120,7 +120,7 @@ const BookShowcase: React.FC<BookShowcaseProps> = ({ lang }) => {
                             {/* Cover Content / Image Placeholder - NO TEXT OVERLAY */}
                             <div className="w-full h-full relative z-10">
                                 <img 
-                                    src="https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=800&auto=format&fit=crop" 
+                                    src="./images/book-cover.png" 
                                     alt="The Silent Garden Book Cover" 
                                     className="w-full h-full object-cover"
                                 />
@@ -132,8 +132,6 @@ const BookShowcase: React.FC<BookShowcaseProps> = ({ lang }) => {
                              <div className="rotate-90 text-gold/60 text-[10px] tracking-[0.3em] uppercase whitespace-nowrap font-medium">The Silent Garden</div>
                         </div>
                         
-                        {/* Pages */}
-                        <div className="book-pages"></div>
                     </div>
                     
                     {/* Shadow underneath */}
