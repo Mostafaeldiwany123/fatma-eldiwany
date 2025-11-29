@@ -119,7 +119,7 @@ const ExperienceTimeline: React.FC<ExperienceTimelineProps> = ({ lang }) => {
             </div>
             <div className="hidden md:block h-px flex-1 bg-gray-200 mx-12 mb-4"></div>
             <a 
-                href="https://www.linkedin.com/in/prof-fatma-el-diwany-4b35832a/"
+                href="https://www.linkedin.com/in/prof-fatma-el-diwany-baa735282/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`group inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-ink hover:text-gold transition-colors`}

@@ -9,20 +9,20 @@ const Gallery: React.FC<GalleryProps> = ({ lang }) => {
     // Gallery with varied aspect ratios mockup
     const imagesData = {
         en: [
-            { id: 1, src: "./images/gallery-1.png", aspect: "aspect-[4/3]", label: "Conference 2023" },
-            { id: 2, src: "./images/gallery-2.png", aspect: "aspect-[3/4]", label: "Book Signing" },
-            { id: 3, src: "./images/gallery-3.png", aspect: "aspect-square", label: "University Lecture" },
-            { id: 4, src: "./images/gallery-4.png", aspect: "aspect-[16/9]", label: "Department Meeting" },
-            { id: 5, src: "./images/gallery-5.png", aspect: "aspect-[3/4]", label: "Award Ceremony" },
-            { id: 6, src: "./images/gallery-6.png", aspect: "aspect-[4/3]", label: "Student Supervision" },
+            { id: 1, src: "./images/gallery-1.png", aspect: "aspect-[4/3]", label: "Imam Al-Busiri Mosque" },
+            { id: 2, src: "./images/gallery-2.png", aspect: "aspect-[3/4]", label: "Received Medal - Officially Pinned a Rotarian" },
+            { id: 3, src: "./images/gallery-3.png", aspect: "aspect-square", label: "Palais Garnier" },
+            { id: 4, src: "./images/gallery-4.png", aspect: "aspect-[16/9]", label: "Eiffel Tower - Hand on Historic Landmark" },
+            { id: 5, src: "./images/gallery-5.png", aspect: "aspect-[3/4]", label: "Paris Streets - Historic City Views" },
+            { id: 6, src: "./images/gallery-6.png", aspect: "aspect-[4/3]", label: "Professional Portrait" },
         ],
         ar: [
-            { id: 1, src: "./images/gallery-1.png", aspect: "aspect-[4/3]", label: "مؤتمر 2023" },
-            { id: 2, src: "./images/gallery-2.png", aspect: "aspect-[3/4]", label: "توقيع الكتاب" },
-            { id: 3, src: "./images/gallery-3.png", aspect: "aspect-square", label: "محاضرة جامعية" },
-            { id: 4, src: "./images/gallery-4.png", aspect: "aspect-[16/9]", label: "اجتماع القسم" },
-            { id: 5, src: "./images/gallery-5.png", aspect: "aspect-[3/4]", label: "حفل تكريم" },
-            { id: 6, src: "./images/gallery-6.png", aspect: "aspect-[4/3]", label: "إشراف طلابي" },
+            { id: 1, src: "./images/gallery-1.png", aspect: "aspect-[4/3]", label: "مسجد الإمام البوصيري" },
+            { id: 2, src: "./images/gallery-2.png", aspect: "aspect-[3/4]", label: "حصول على ميدالية - رسميًا روتارية" },
+            { id: 3, src: "./images/gallery-3.png", aspect: "aspect-square", label: "دار أوبرا باليه باريس" },
+            { id: 4, src: "./images/gallery-4.png", aspect: "aspect-[16/9]", label: "برج إيفل - اليد على المعلم التاريخي" },
+            { id: 5, src: "./images/gallery-5.png", aspect: "aspect-[3/4]", label: "شوارع باريس - مشاهد المدينة التاريخية" },
+            { id: 6, src: "./images/gallery-6.png", aspect: "aspect-[4/3]", label: "صورة شخصية احترافية" },
         ]
     };
 

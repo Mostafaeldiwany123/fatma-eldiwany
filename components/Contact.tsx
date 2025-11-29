@@ -93,7 +93,7 @@ const Contact: React.FC<ContactProps> = ({ lang }) => {
                 <div>
                     <h4 className={`font-serif text-xl text-white mb-6 ${lang === 'ar' ? 'font-arabic font-bold' : ''}`}>{t.connect}</h4>
                     <a 
-                        href="https://www.linkedin.com/in/prof-fatma-el-diwany-4b35832a/" 
+                        href="https://www.linkedin.com/in/prof-fatma-el-diwany-baa735282/" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className={`group flex items-center gap-4 bg-white/5 hover:bg-gold hover:text-ink p-4 rounded-sm border border-white/10 transition-all duration-300 mb-4`}

@@ -9,7 +9,7 @@ const BookShowcase: React.FC<BookShowcaseProps> = ({ lang }) => {
   const content = {
     en: {
         tag: 'Complimentary Digital Edition',
-        title: 'The Silent Garden',
+        title: 'Diwany Snapshots',
         desc: 'An evocative exploration of narrative structure and cultural identity. Prof. Fatma invites you to download her latest work entirely for free.',
         recommended: 'Highly Recommended by Colleagues',
         audio: 'Audio Preview',
@@ -21,7 +21,7 @@ const BookShowcase: React.FC<BookShowcaseProps> = ({ lang }) => {
     },
     ar: {
         tag: 'نسخة رقمية مجانية',
-        title: 'The Silent Garden',
+        title: 'لقطات دیوانیة',
         desc: 'استكشاف مثير لهيكل السرد والهوية الثقافية. تدعوك البروفيسورة لتحميل أحدث أعمالها مجانًا بالكامل.',
         recommended: 'موصى به بشدة من الزملاء',
         audio: 'معاينة صوتية',
@@ -63,28 +63,26 @@ const BookShowcase: React.FC<BookShowcaseProps> = ({ lang }) => {
                     <span className={`text-sm text-charcoal/60 font-medium tracking-wide ${lang === 'ar' ? 'font-arabic text-lg' : ''}`}>{t.recommended}</span>
                 </div>
 
-                <div className="bg-white p-6 rounded-sm border border-stone-100 shadow-sm relative overflow-hidden">
-                    <div className={`absolute top-0 w-20 h-20 bg-gold/5 rounded-full -mt-10 ${lang === 'ar' ? 'left-0 -ml-10' : 'right-0 -mr-10'}`}></div>
-                    <h4 className={`font-serif text-lg mb-4 flex items-center gap-2 relative z-10 ${lang === 'ar' ? 'font-arabic font-bold text-xl' : ''}`}>
+                <div className="bg-white p-6 rounded-sm border border-stone-100 shadow-sm">
+                    <h4 className={`font-serif text-lg mb-4 flex items-center gap-2 ${lang === 'ar' ? 'font-arabic font-bold text-xl' : ''}`}>
                         <PlayCircle className="text-gold" />
                         {t.audio}
                     </h4>
-                    {/* Fake Audio Player UI */}
-                    <div className="flex items-center gap-4 relative z-10">
-                         <button className="w-12 h-12 bg-ink rounded-full flex items-center justify-center text-white hover:bg-gold transition-colors shadow-lg">
-                            <PlayCircle size={24} fill="currentColor" className={lang === 'ar' ? 'mr-1' : 'ml-1'} />
-                         </button>
-                         <div className="flex-1">
-                             <div className="h-1 bg-gray-100 rounded-full w-full overflow-hidden">
-                                 <div className={`h-full bg-gold w-1/3 rounded-full ${lang === 'ar' ? 'float-right' : ''}`}></div>
-                             </div>
-                             <div className="flex justify-between text-[10px] text-gray-400 mt-2 font-mono">
-                                 <span>01:23</span>
-                                 <span>14:45</span>
-                             </div>
-                         </div>
+                    <div className="flex items-center gap-4">
+                        <button className="w-10 h-10 bg-gold rounded-full flex items-center justify-center text-white hover:bg-ink transition-colors">
+                            <PlayCircle size={20} fill="currentColor" />
+                        </button>
+                        <div className="flex-1">
+                            <div className="h-2 bg-gray-100 rounded-full">
+                                <div className="h-full bg-gold w-1/3 rounded-full"></div>
+                            </div>
+                            <div className="flex justify-between text-xs text-gray-500 mt-2">
+                                <span>1:23</span>
+                                <span>14:45</span>
+                            </div>
+                        </div>
                     </div>
-                    <p className={`text-xs text-gray-400 mt-4 italic px-1 ${lang === 'ar' ? 'font-arabic text-sm' : ''}`}>{t.narrated}</p>
+                    <p className={`text-sm text-gray-600 mt-3 ${lang === 'ar' ? 'font-arabic' : ''}`}>{t.narrated}</p>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -121,7 +119,7 @@ const BookShowcase: React.FC<BookShowcaseProps> = ({ lang }) => {
                             <div className="w-full h-full relative z-10">
                                 <img 
                                     src="./images/book-cover.png" 
-                                    alt="The Silent Garden Book Cover" 
+                                    alt="Diwany Snapshots Book Cover" 
                                     className="w-full h-full object-cover"
                                 />
                             </div>
@@ -129,7 +127,7 @@ const BookShowcase: React.FC<BookShowcaseProps> = ({ lang }) => {
                         
                         {/* Spine */}
                         <div className="book-spine flex items-center justify-center overflow-hidden">
-                             <div className="rotate-90 text-gold/60 text-[10px] tracking-[0.3em] uppercase whitespace-nowrap font-medium">The Silent Garden</div>
+                             <div className="rotate-90 text-gold/60 text-[10px] tracking-[0.3em] uppercase whitespace-nowrap font-medium">Diwany Snapshots</div>
                         </div>
                         
                     </div>

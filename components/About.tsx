@@ -67,7 +67,7 @@ const About: React.FC<AboutProps> = ({ lang }) => {
                         <img 
                             src="./images/lecture.png" 
                             alt="Professor in Lecture" 
-                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                            className="w-full h-full object-cover transition-all duration-700"
                         />
                         <div className="absolute inset-0 border-[12px] border-white/90"></div>
                     </div>
