@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowRight, X, ChevronLeft, ChevronRight, Menu, ZoomIn, Zoom
 import HTMLFlipBook from 'react-pageflip';
 import { bookContent, Chapter } from '../data/bookContent';
 // @ts-ignore
-import bookCover from '../images/book-cover.png';
+const bookCover = "/images/book-cover.png";
 
 interface BookReaderProps {
     lang?: 'ar'; // Arabic only
@@ -14,7 +14,7 @@ interface BookReaderProps {
 // --- CONSTANTS ---
 const PAGE_WIDTH = 500;
 const PAGE_HEIGHT = 720;
-const CHAR_LIMIT = 900; // Reduced to prevent text overflow
+const CONTENT_HEIGHT_LIMIT = 570; // 720 - padding - header/footer buffers ~ 570px safe zone
 
 // --- COMPONENTS ---
 
@@ -81,112 +81,10 @@ const PageCover = forwardRef<HTMLDivElement, { children: React.ReactNode }>(
 );
 PageCover.displayName = 'PageCover';
 
-
-
-// --- SMART CONTENT SPLITTER ---
-
-// Helper to safely split text without breaking HTML if simple
-// For this specific use case, we assume content is mostly paragraphs <p>...
-const processBookContent = (chapters: Chapter[], charLimit: number) => {
-    const pages: { content: string; chapterTitle: string; pageNumberInChapter: number }[] = [];
-    const toc: { title: string; pageNumber: number }[] = [];
-
-    let globalPageCounter = 3;
-
-    chapters.forEach((chapter) => {
-        toc.push({ title: chapter.title, pageNumber: globalPageCounter });
-
-        // Parse content
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = chapter.content;
-        const paragraphs = Array.from(tempDiv.querySelectorAll('p'));
-
-        let currentPageContent = '';
-        let currentLength = 0;
-        let pageInChapter = 1;
-
-        // Function to push current buffer to page
-        const flushPage = () => {
-            if (currentPageContent.length > 0) {
-                pages.push({
-                    content: currentPageContent,
-                    chapterTitle: chapter.title,
-                    pageNumberInChapter: pageInChapter
-                });
-                globalPageCounter++;
-                currentPageContent = '';
-                currentLength = 0;
-                pageInChapter++;
-            }
-        };
-
-        for (let i = 0; i < paragraphs.length; i++) {
-            const p = paragraphs[i];
-            const pText = p.textContent || '';
-            const pOuter = p.outerHTML;
-            const weightedLen = pText.length + 40; // Base weight for paragraph structure
-
-            // CASE 1: Paragraph fits perfectly
-            if (currentLength + weightedLen <= charLimit) {
-                currentPageContent += pOuter;
-                currentLength += weightedLen;
-                continue;
-            }
-
-            // CASE 2: Paragraph makes it overflow.
-
-            // Sub-case 2a: Page is already very full (>90%). Just flush and put this P on new page.
-            if (currentLength > charLimit * 0.9) {
-                flushPage();
-                currentPageContent += pOuter;
-                currentLength += weightedLen;
-                continue;
-            }
-
-            // Sub-case 2b: Page has space, but P is too big. We must SPLIT the paragraph.
-            // We will split by sentences/pauses.
-            const sentences = pText.split(/([.،!?] )/g); // Split keeping delimiters
-
-            let currentPBuffer = '';
-
-            for (let j = 0; j < sentences.length; j++) {
-                const s = sentences[j];
-                // Check if adding this sentence to buffer exceeds remaining space on page?
-                // Actually we just check `currentLength` + `currentPBuffer` so far + `s`
-
-                if (currentLength + currentPBuffer.length + s.length + 10 > charLimit) {
-                    // Flush what we have in buffer to current page, then break page
-                    if (currentPBuffer.length > 0) {
-                        currentPageContent += `<p>${currentPBuffer}</p>`;
-                    }
-                    flushPage();
-
-                    // Start new P on new page with current sentence
-                    currentPBuffer = s;
-                    currentLength = s.length + 40;
-                } else {
-                    currentPBuffer += s;
-                }
-            }
-
-            // Remaining buffer
-            if (currentPBuffer.length > 0) {
-                currentPageContent += `<p>${currentPBuffer}</p>`;
-                currentLength += currentPBuffer.length;
-            }
-        }
-
-        flushPage(); // Final flush for chapter
-    });
-
-    console.log('TOC Generated:', toc);
-    console.log('Total Pages:', pages.length);
-    return { pages, toc, totalComputedPages: globalPageCounter };
-};
-
 const BookReader: React.FC<BookReaderProps> = () => {
     const book = useRef<any>(null);
     const content = bookContent['ar']; // Always Arabic
+    const measureRef = useRef<HTMLDivElement>(null);
 
     // --- UTILITIES STATE ---
     const [theme, setTheme] = useState<'sepia' | 'light' | 'dark'>('sepia');
@@ -200,8 +98,10 @@ const BookReader: React.FC<BookReaderProps> = () => {
         }
     }, [theme]);
 
-    const { pages: storyPages, toc } = useMemo(() => processBookContent(content.chapters, CHAR_LIMIT), [content]);
-
+    // PAGINATION STATE
+    const [storyPages, setStoryPages] = useState<{ content: string; chapterTitle: string; pageNumberInChapter: number }[]>([]);
+    const [toc, setToc] = useState<{ title: string; pageNumber: number }[]>([]);
+    const [isPaginated, setIsPaginated] = useState(false);
 
     // Calculate initial scale synchronously to prevent flash
     const calculateScale = useCallback(() => {
@@ -227,11 +127,114 @@ const BookReader: React.FC<BookReaderProps> = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [isReady, setIsReady] = useState(false);
 
+    // Height-based Pagination Effect
+    useEffect(() => {
+        if (!measureRef.current) return;
+
+        console.log("Starting pagination...");
+        const measureDiv = measureRef.current;
+        const pages: { content: string; chapterTitle: string; pageNumberInChapter: number }[] = [];
+        const newToc: { title: string; pageNumber: number }[] = [];
+        let globalPageCounter = 3; // Starts after Cover (0), Title (1), TOC (2)
+
+        content.chapters.forEach((chapter) => {
+            newToc.push({ title: chapter.title, pageNumber: globalPageCounter });
+
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = chapter.content;
+            const nodes = Array.from(tempDiv.children);
+
+            let currentPageContent = "";
+            let pageInChapter = 1;
+
+            const flushPage = () => {
+                if (currentPageContent) {
+                    pages.push({
+                        content: currentPageContent,
+                        chapterTitle: chapter.title,
+                        pageNumberInChapter: pageInChapter
+                    });
+                    globalPageCounter++;
+                    pageInChapter++;
+                    currentPageContent = "";
+                    measureDiv.innerHTML = "";
+                }
+            };
+
+            for (let i = 0; i < nodes.length; i++) {
+                const node = nodes[i];
+                const nodeHTML = node.outerHTML;
+
+                // Try adding to current
+                const testContent = currentPageContent + nodeHTML;
+                measureDiv.innerHTML = testContent;
+
+                if (measureDiv.offsetHeight <= CONTENT_HEIGHT_LIMIT) {
+                    currentPageContent = testContent;
+                } else {
+                    // Overflow
+                    if (currentPageContent === "") {
+                        // Current node alone is too big? Split it.
+                        // We split by sentences or fragments
+                        const text = node.textContent || "";
+                        // Split by full stops, commas, etc but keep delimiter. Matches arabic comma too.
+                        const sentences = text.split(/([.،!?] )/g);
+
+                        const tagName = node.tagName.toLowerCase();
+                        const startTag = `<${tagName}>`;
+                        const endTag = `</${tagName}>`;
+
+                        let tempBuffer = "";
+
+                        for (let j = 0; j < sentences.length; j++) {
+                            const s = sentences[j];
+                            // Try adding s to tempBuffer
+                            const testP = `${startTag}${tempBuffer}${s}${endTag}`;
+                            // Measure ONLY this current splitting node + whatever was already on page (which is empty here)
+                            measureDiv.innerHTML = testP;
+
+                            if (measureDiv.offsetHeight <= CONTENT_HEIGHT_LIMIT) {
+                                tempBuffer += s;
+                            } else {
+                                // Flush tempBuffer to a page
+                                if (tempBuffer) {
+                                    pages.push({
+                                        content: `${startTag}${tempBuffer}${endTag}`,
+                                        chapterTitle: chapter.title,
+                                        pageNumberInChapter: pageInChapter
+                                    });
+                                    globalPageCounter++;
+                                    pageInChapter++;
+                                    measureDiv.innerHTML = "";
+                                }
+                                tempBuffer = s;
+                            }
+                        }
+
+                        if (tempBuffer) {
+                            currentPageContent = `${startTag}${tempBuffer}${endTag}`;
+                        }
+
+                    } else {
+                        // Page full, but node fits on next page?
+                        flushPage();
+                        // Retry this node
+                        i--;
+                    }
+                }
+            }
+            flushPage();
+        });
+
+        setStoryPages(pages);
+        setToc(newToc);
+        setIsPaginated(true);
+        console.log("Pagination complete. Total pages:", pages.length);
+
+    }, [content]);
+
     // Mark as ready after initial render and set up resize listener
     useEffect(() => {
-        // setIsReady(true); // Moved to onInit to prevent flash logic
-
-
         const handleResize = () => {
             const { scale: newScale, mobile } = calculateScale();
             setScale(newScale);
@@ -245,7 +248,6 @@ const BookReader: React.FC<BookReaderProps> = () => {
     const prevPage = () => book.current?.pageFlip().flipPrev();
     const nextPage = () => book.current?.pageFlip().flipNext();
     const goToPage = (p: number) => {
-        // Use jump logic (force remount) to avoid animation and double-flip bugs
         setIsReady(false);
         setStartPage(p);
         setRemountKey(prev => prev + 1);
@@ -255,7 +257,7 @@ const BookReader: React.FC<BookReaderProps> = () => {
         setCurrentPage(e.data);
     }, []);
 
-    // Keyboard navigation - spatial (right = next, left = prev)
+    // Keyboard navigation
     useEffect(() => {
         const h = (e: KeyboardEvent) => {
             if (e.key === 'ArrowRight') nextPage();
@@ -265,16 +267,9 @@ const BookReader: React.FC<BookReaderProps> = () => {
         return () => window.removeEventListener('keydown', h);
     }, []);
 
-    // Centering cover logic for Desktop only
+    // Centering cover logic
     const transformStyle = useMemo(() => {
         if (!isMobile && currentPage === 0) {
-            // Shift to center the right page
-            // PAGE_WIDTH * scale / 2? No transform is on the wrapper.
-            // Width of wrapper is 2*PAGE_WIDTH
-            // We want the Right Half to be in the center of the screen
-            // The wrapper is centered in screen flex container
-            // So currently Spine is at Center.
-            // We need to move spine Left by PAGE_WIDTH/2
             return { transform: `scale(${scale}) translateX(-25%)` };
         }
         return { transform: `scale(${scale})` };
@@ -302,6 +297,22 @@ const BookReader: React.FC<BookReaderProps> = () => {
     return (
         <div className={`fixed inset-0 flex flex-col overflow-hidden transition-colors duration-300 ${themeStyles.outer}`} dir="rtl" lang="ar">
 
+            {/* Hidden Measure Div */}
+            <div
+                ref={measureRef}
+                style={{
+                    position: 'absolute',
+                    visibility: 'hidden',
+                    width: '436px', // 500 - 32 - 32
+                    fontSize: '1rem',
+                    lineHeight: '1.8',
+                    fontFamily: 'serif',
+                    textAlign: 'justify',
+                    padding: 0,
+                    margin: 0,
+                    zIndex: -100
+                }}
+            />
 
             {/* Header */}
             <header className={`h-14 flex items-center justify-between px-4 sm:px-6 backdrop-blur-md border-b text-[#1a1a1a] shadow-sm z-50 shrink-0 ${theme === 'dark' ? 'bg-[#1a1a1a]/90 text-white border-white/10' : 'bg-white/80 border-[#D4AF37]/20'}`}>
@@ -324,8 +335,6 @@ const BookReader: React.FC<BookReaderProps> = () => {
                     <button onClick={toggleTheme} title="تغيير المظهر" className="p-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
                         <Palette size={18} />
                     </button>
-
-
 
                     {/* Zoom */}
                     <div className="hidden sm:flex items-center bg-black/5 dark:bg-white/10 rounded-full px-1">
@@ -362,101 +371,103 @@ const BookReader: React.FC<BookReaderProps> = () => {
                 </button>
 
                 {/* Scalable Container */}
-                <div
-                    style={{
-                        ...transformStyle,
-                        width: isMobile ? PAGE_WIDTH : PAGE_WIDTH * 2,
-                        height: PAGE_HEIGHT
-                    }}
-                    className={`transition-all duration-500 ease-in-out origin-center ${(!isMobile && currentPage === 0) ? '' : 'custom-book-shadow'}`}
-                >
-                    <HTMLFlipBook
-                        key={`${isMobile ? 'mobile' : 'desktop'}-${remountKey}`}
-                        width={PAGE_WIDTH}
-                        height={PAGE_HEIGHT}
-                        size="fixed"
-                        minWidth={PAGE_WIDTH}
-                        maxWidth={PAGE_WIDTH}
-                        minHeight={PAGE_HEIGHT}
-                        maxHeight={PAGE_HEIGHT}
-                        maxShadowOpacity={0.5}
-                        showCover={true}
-                        mobileScrollSupport={true}
-                        usePortrait={isMobile}
-                        startPage={startPage}
-                        drawShadow={!isMobile}
-                        flippingTime={1000}
-                        useMouseEvents={true}
-                        onFlip={onFlip}
-                        onInit={() => setIsReady(true)}
-                        className="book-flip"
-                        ref={book}
-                        clickEventForward={true}
+                {isPaginated && (
+                    <div
+                        style={{
+                            ...transformStyle,
+                            width: isMobile ? PAGE_WIDTH : PAGE_WIDTH * 2,
+                            height: PAGE_HEIGHT
+                        }}
+                        className={`transition-all duration-500 ease-in-out origin-center ${(!isMobile && currentPage === 0) ? '' : 'custom-book-shadow'}`}
                     >
-                        {/* 0: Cover */}
-                        <PageCover>
-                            <img src={bookCover} alt="Cover" className="w-full h-full object-cover" />
-                        </PageCover>
+                        <HTMLFlipBook
+                            key={`${isMobile ? 'mobile' : 'desktop'}-${remountKey}`}
+                            width={PAGE_WIDTH}
+                            height={PAGE_HEIGHT}
+                            size="fixed"
+                            minWidth={PAGE_WIDTH}
+                            maxWidth={PAGE_WIDTH}
+                            minHeight={PAGE_HEIGHT}
+                            maxHeight={PAGE_HEIGHT}
+                            maxShadowOpacity={0.5}
+                            showCover={true}
+                            mobileScrollSupport={true}
+                            usePortrait={isMobile}
+                            startPage={startPage}
+                            drawShadow={!isMobile}
+                            flippingTime={1000}
+                            useMouseEvents={true}
+                            onFlip={onFlip}
+                            onInit={() => setIsReady(true)}
+                            className="book-flip"
+                            ref={book}
+                            clickEventForward={true}
+                        >
+                            {/* 0: Cover */}
+                            <PageCover>
+                                <img src={bookCover} alt="Cover" className="w-full h-full object-cover" />
+                            </PageCover>
 
-                        {/* 1: Title */}
-                        <Page number={1} isHard={true} themeStyles={themeStyles} fontSize="1rem">
-                            <div className={`h-full flex flex-col justify-center items-center text-center ${themeStyles.text}`}>
-                                <h1 className="text-4xl px-8 leading-tight font-serif mb-8">{content.title}</h1>
-                                <div className={`w-24 h-[2px] mb-8 ${theme === 'dark' ? 'bg-white/20' : 'bg-black/20'}`}></div>
-                                <p className="text-xl opacity-80 font-serif italic">{content.author}</p>
-                            </div>
-                        </Page>
-
-                        {/* 2: TOC */}
-                        <Page number={2} header="الفهرس" themeStyles={themeStyles} fontSize="1rem">
-                            <div className="h-full flex flex-col">
-                                <h2 className={`text-2xl font-serif text-center mb-8 pb-4 border-b ${theme === 'dark' ? 'border-white/10' : 'border-black/10'}`}>فهرس المحتويات</h2>
-                                <div className="space-y-4 pr-2 overflow-y-auto custom-scrollbar flex-1">
-                                    {toc.map((item, idx) => (
-                                        <div
-                                            key={idx}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                console.log(`Clicking TOC item "${item.title}" - navigating to page ${item.pageNumber}`);
-                                                goToPage(item.pageNumber);
-                                            }}
-                                            className={`cursor-pointer group flex items-baseline justify-between p-1 rounded transition-colors ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-black/5'}`}
-                                        >
-                                            <span className={`font-serif text-sm ${themeStyles.text}`}>{item.title}</span>
-                                            <span className="text-xs opacity-50 font-mono group-hover:opacity-100">{item.pageNumber}</span>
-                                        </div>
-                                    ))}
+                            {/* 1: Title */}
+                            <Page number={1} isHard={true} themeStyles={themeStyles} fontSize="1rem">
+                                <div className={`h-full flex flex-col justify-center items-center text-center ${themeStyles.text}`}>
+                                    <h1 className="text-4xl px-8 leading-tight font-serif mb-8">{content.title}</h1>
+                                    <div className={`w-24 h-[2px] mb-8 ${theme === 'dark' ? 'bg-white/20' : 'bg-black/20'}`}></div>
+                                    <p className="text-xl opacity-80 font-serif italic">{content.author}</p>
                                 </div>
-                            </div>
-                        </Page>
-
-                        {/* Story Pages */}
-                        {storyPages.map((page, idx) => (
-                            <Page key={idx} number={idx + 3} header={page.chapterTitle} isHard={false} themeStyles={themeStyles} fontSize="1rem">
-                                {page.pageNumberInChapter === 1 && (
-                                    <h3 className={`text-2xl font-bold mb-6 font-serif text-center mt-2 ${themeStyles.text}`}>
-                                        {page.chapterTitle}
-                                    </h3>
-                                )}
-                                <div
-                                    dangerouslySetInnerHTML={{ __html: page.content }}
-                                    style={{ direction: 'rtl' }}
-                                />
                             </Page>
-                        ))}
 
-                        {/* End Page */}
-                        <Page themeStyles={themeStyles}>
-                            <div className="h-full flex items-center justify-center opacity-40">
-                                <div className="text-center">
-                                    <div className={`w-4 h-4 rounded-full mx-auto mb-4 ${theme === 'dark' ? 'bg-white/20' : 'bg-black/20'}`}></div>
-                                    <p className={`font-serif italic text-sm ${themeStyles.text}`}>نهاية الكتاب</p>
+                            {/* 2: TOC */}
+                            <Page number={2} header="الفهرس" themeStyles={themeStyles} fontSize="1rem">
+                                <div className="h-full flex flex-col">
+                                    <h2 className={`text-2xl font-serif text-center mb-8 pb-4 border-b ${theme === 'dark' ? 'border-white/10' : 'border-black/10'}`}>فهرس المحتويات</h2>
+                                    <div className="space-y-4 pr-2 overflow-y-auto custom-scrollbar flex-1">
+                                        {toc.map((item, idx) => (
+                                            <div
+                                                key={idx}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    console.log(`Clicking TOC item "${item.title}" - navigating to page ${item.pageNumber}`);
+                                                    goToPage(item.pageNumber);
+                                                }}
+                                                className={`cursor-pointer group flex items-baseline justify-between p-1 rounded transition-colors ${theme === 'dark' ? 'hover:bg-white/10' : 'hover:bg-black/5'}`}
+                                            >
+                                                <span className={`font-serif text-sm ${themeStyles.text}`}>{item.title}</span>
+                                                <span className="text-xs opacity-50 font-mono group-hover:opacity-100">{item.pageNumber}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        </Page>
+                            </Page>
 
-                    </HTMLFlipBook>
-                </div>
+                            {/* Story Pages */}
+                            {storyPages.map((page, idx) => (
+                                <Page key={idx} number={idx + 3} header={page.chapterTitle} isHard={false} themeStyles={themeStyles} fontSize="1rem">
+                                    {page.pageNumberInChapter === 1 && (
+                                        <h3 className={`text-2xl font-bold mb-6 font-serif text-center mt-2 ${themeStyles.text}`}>
+                                            {page.chapterTitle}
+                                        </h3>
+                                    )}
+                                    <div
+                                        dangerouslySetInnerHTML={{ __html: page.content }}
+                                        style={{ direction: 'rtl' }}
+                                    />
+                                </Page>
+                            ))}
+
+                            {/* End Page */}
+                            <Page themeStyles={themeStyles}>
+                                <div className="h-full flex items-center justify-center opacity-40">
+                                    <div className="text-center">
+                                        <div className={`w-4 h-4 rounded-full mx-auto mb-4 ${theme === 'dark' ? 'bg-white/20' : 'bg-black/20'}`}></div>
+                                        <p className={`font-serif italic text-sm ${themeStyles.text}`}>نهاية الكتاب</p>
+                                    </div>
+                                </div>
+                            </Page>
+
+                        </HTMLFlipBook>
+                    </div>
+                )}
             </div>
 
             <style>{`

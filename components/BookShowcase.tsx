@@ -99,7 +99,7 @@ const BookShowcase: React.FC<BookShowcaseProps> = ({ lang }) => {
                                     {/* Cover Content / Image Placeholder - NO TEXT OVERLAY */}
                                     <div className="w-full h-full relative z-10">
                                         <img
-                                            src="./images/book-cover.png"
+                                            src="/images/book-cover.png"
                                             alt="Diwany Snapshots Book Cover"
                                             className="w-full h-full object-cover"
                                         />

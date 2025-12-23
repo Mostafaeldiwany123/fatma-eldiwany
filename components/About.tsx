@@ -87,7 +87,7 @@ const About: React.FC<AboutProps> = ({ lang }) => {
                         <div className="sticky top-32">
                             <div className="relative aspect-[3/4] mb-8 group overflow-hidden bg-gray-100">
                                 <img
-                                    src="./images/about-photo.png"
+                                    src="/images/about-photo.png"
                                     alt="Professor in Lecture"
                                     className="w-full h-full object-cover transition-all duration-700"
                                 />

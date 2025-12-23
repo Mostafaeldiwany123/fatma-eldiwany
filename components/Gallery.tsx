@@ -9,20 +9,20 @@ const Gallery: React.FC<GalleryProps> = ({ lang }) => {
     // Gallery with varied aspect ratios mockup
     const imagesData = {
         en: [
-            { id: 1, src: "./images/gallery-1.png", aspect: "aspect-[4/3]", label: "Imam Al-Busiri Mosque" },
-            { id: 2, src: "./images/gallery-2.png", aspect: "aspect-[3/4]", label: "Received Medal - Officially Pinned a Rotarian" },
-            { id: 3, src: "./images/gallery-3.png", aspect: "aspect-square", label: "Empowering People of Determination" },
-            { id: 4, src: "./images/gallery-4.png", aspect: "aspect-[16/9]", label: "Eiffel Tower - Hand on Historic Landmark" },
-            { id: 5, src: "./images/gallery-5.png", aspect: "aspect-[3/4]", label: "Paris Streets - Historic City Views" },
-            { id: 6, src: "./images/gallery-6.png", aspect: "aspect-[4/3]", label: "Professional Portrait" },
+            { id: 1, src: "/images/gallery-1.png", aspect: "aspect-[4/3]", label: "Imam Al-Busiri Mosque" },
+            { id: 2, src: "/images/gallery-2.png", aspect: "aspect-[3/4]", label: "Received Medal - Officially Pinned a Rotarian" },
+            { id: 3, src: "/images/gallery-3.png", aspect: "aspect-square", label: "Empowering People of Determination" },
+            { id: 4, src: "/images/gallery-4.png", aspect: "aspect-[16/9]", label: "Eiffel Tower - Hand on Historic Landmark" },
+            { id: 5, src: "/images/gallery-5.png", aspect: "aspect-[3/4]", label: "Paris Streets - Historic City Views" },
+            { id: 6, src: "/images/gallery-6.png", aspect: "aspect-[4/3]", label: "Professional Portrait" },
         ],
         ar: [
-            { id: 1, src: "./images/gallery-1.png", aspect: "aspect-[4/3]", label: "مسجد الإمام البوصيري" },
-            { id: 2, src: "./images/gallery-2.png", aspect: "aspect-[3/4]", label: "حصول على ميدالية - رسميًا روتارية" },
-            { id: 3, src: "./images/gallery-3.png", aspect: "aspect-square", label: " دعم أصحاب الهمم" },
-            { id: 4, src: "./images/gallery-4.png", aspect: "aspect-[16/9]", label: "برج إيفل - اليد على المعلم التاريخي" },
-            { id: 5, src: "./images/gallery-5.png", aspect: "aspect-[3/4]", label: "شوارع باريس - مشاهد المدينة التاريخية" },
-            { id: 6, src: "./images/gallery-6.png", aspect: "aspect-[4/3]", label: "صورة شخصية احترافية" },
+            { id: 1, src: "/images/gallery-1.png", aspect: "aspect-[4/3]", label: "مسجد الإمام البوصيري" },
+            { id: 2, src: "/images/gallery-2.png", aspect: "aspect-[3/4]", label: "حصول على ميدالية - رسميًا روتارية" },
+            { id: 3, src: "/images/gallery-3.png", aspect: "aspect-square", label: " دعم أصحاب الهمم" },
+            { id: 4, src: "/images/gallery-4.png", aspect: "aspect-[16/9]", label: "برج إيفل - اليد على المعلم التاريخي" },
+            { id: 5, src: "/images/gallery-5.png", aspect: "aspect-[3/4]", label: "شوارع باريس - مشاهد المدينة التاريخية" },
+            { id: 6, src: "/images/gallery-6.png", aspect: "aspect-[4/3]", label: "صورة شخصية احترافية" },
         ]
     };
 

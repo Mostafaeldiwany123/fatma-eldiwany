@@ -110,7 +110,7 @@ const Hero: React.FC<HeroProps> = ({ lang }) => {
               <div className="absolute inset-0 bg-white p-2 shadow-2xl z-10 rotate-2 hover:rotate-0 transition-transform duration-700 ease-out rounded-sm">
                 <div className="w-full h-full relative overflow-hidden bg-stone-100 border border-stone-200">
                   <img
-                    src="./images/profile-headshot.png"
+                    src="/images/profile-headshot.png"
                     alt="Prof. Fatma El-Diwany"
                     className="w-full h-full object-cover"
                   />
