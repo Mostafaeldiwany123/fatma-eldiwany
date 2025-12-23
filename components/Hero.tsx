@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -64,16 +65,16 @@ const Hero: React.FC<HeroProps> = ({ lang }) => {
             </p>
 
             <div className={`flex flex-wrap gap-4 pt-2 justify-center md:justify-start`}>
-              <a
-                href="#book"
-                className={`group inline-flex items-center justify-center gap-2 px-8 py-3.5 text-sm uppercase tracking-wider font-bold text-white bg-ink rounded-sm hover:bg-gold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 ${lang === 'ar' ? 'text-lg' : ''}`}
+              <Link
+                to="/read"
+                className={`group inline-flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-bold text-white bg-ink rounded-sm hover:bg-gold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 ${lang === 'ar' ? 'text-lg' : 'uppercase tracking-wider'}`}
               >
                 <BookOpen className="h-4 w-4" />
                 {t.theBook}
-              </a>
+              </Link>
               <a
                 href="#contact"
-                className={`inline-flex items-center justify-center gap-2 px-8 py-3.5 text-sm uppercase tracking-wider font-bold text-ink border border-ink rounded-sm hover:bg-ink hover:text-white transition-all duration-300 ${lang === 'ar' ? 'text-lg' : ''}`}
+                className={`inline-flex items-center justify-center gap-2 px-8 py-3.5 text-sm font-bold text-ink border border-ink rounded-sm hover:bg-ink hover:text-white transition-all duration-300 ${lang === 'ar' ? 'text-lg' : 'uppercase tracking-wider'}`}
               >
                 {t.contact}
                 <ArrowRight className={`h-4 w-4 group-hover:translate-x-1 transition-transform ${lang === 'ar' ? 'rotate-180' : ''}`} />

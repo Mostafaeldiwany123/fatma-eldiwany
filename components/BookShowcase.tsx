@@ -1,5 +1,6 @@
 import React from 'react';
-import { Download, PlayCircle, Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Download, Star, BookOpen } from 'lucide-react';
 
 interface BookShowcaseProps {
     lang: 'en' | 'ar';
@@ -17,7 +18,8 @@ const BookShowcase: React.FC<BookShowcaseProps> = ({ lang }) => {
             dl: 'Download E-Book',
             stream: 'Stream Audiobook',
             free: 'Free',
-            gift: 'Gift'
+            gift: 'Gift',
+            read: 'Read Online'
         },
         ar: {
             tag: 'نسخة رقمية مجانية',
@@ -29,7 +31,8 @@ const BookShowcase: React.FC<BookShowcaseProps> = ({ lang }) => {
             dl: 'تحميل الكتاب الإلكتروني',
             stream: 'استمع للكتاب الصوتي',
             free: 'هدية',
-            gift: 'مجانية'
+            gift: 'مجانية',
+            read: 'اقرأ الآن'
         }
     };
 
@@ -63,36 +66,14 @@ const BookShowcase: React.FC<BookShowcaseProps> = ({ lang }) => {
                             <span className={`text-sm text-charcoal/60 font-medium tracking-wide ${lang === 'ar' ? 'text-lg' : ''}`}>{t.recommended}</span>
                         </div>
 
-                        <div className="bg-white p-6 rounded-sm border border-stone-100 shadow-sm">
-                            <h4 className={`font-serif text-lg mb-4 flex items-center gap-2 ${lang === 'ar' ? 'font-bold text-xl' : ''}`}>
-                                <PlayCircle className="text-gold" />
-                                {t.audio}
-                            </h4>
-                            <div className="flex items-center gap-4">
-                                <button className="w-10 h-10 bg-gold rounded-full flex items-center justify-center text-white hover:bg-ink transition-colors">
-                                    <PlayCircle size={20} fill="currentColor" />
-                                </button>
-                                <div className="flex-1">
-                                    <div className="h-2 bg-gray-100 rounded-full">
-                                        <div className="h-full bg-gold w-1/3 rounded-full"></div>
-                                    </div>
-                                    <div className="flex justify-between text-xs text-gray-500 mt-2">
-                                        <span>1:23</span>
-                                        <span>14:45</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <p className="text-sm text-gray-600 mt-3">{t.narrated}</p>
-                        </div>
+
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                            <button className={`flex-1 bg-ink text-white px-8 py-4 rounded-sm font-medium hover:bg-charcoal transition-all shadow-lg flex items-center justify-center gap-3 group ${lang === 'ar' ? 'text-lg' : ''}`}>
-                                <Download size={20} />
-                                <span className="tracking-wide">{t.dl}</span>
-                            </button>
-                            <button className={`flex-1 bg-transparent border border-ink text-ink px-8 py-4 rounded-sm font-medium hover:bg-white transition-all flex items-center justify-center gap-3 ${lang === 'ar' ? 'text-lg' : ''}`}>
-                                <span className="tracking-wide">{t.stream}</span>
-                            </button>
+                            <Link to="/read" className={`flex-1 bg-ink text-white px-8 py-4 rounded-sm font-medium hover:bg-charcoal transition-all shadow-lg flex items-center justify-center gap-3 group ${lang === 'ar' ? 'text-lg' : ''}`}>
+                                <BookOpen size={20} />
+                                <span className="tracking-wide">{t.read}</span>
+                            </Link>
+
                         </div>
                     </div>
 
