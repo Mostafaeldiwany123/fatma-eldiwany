@@ -9,19 +9,30 @@ const About: React.FC<AboutProps> = ({ lang }) => {
     const content = {
         en: {
             coreCompetencies: 'Core Competencies',
-            lit: 'English Literature',
-            trans: 'Translation (EN/AR)',
-            edit: 'Academic Editing',
-            pr: 'Public Relations',
-            aboutHeader: 'About The Professor',
+            lit: 'University Teaching',
+            trans: 'Inclusive Education',
+            edit: 'Cultural & Media Work',
+            pr: 'Academic Leadership',
+            aboutHeader: 'About Me',
             title: 'A lifetime dedicated to',
             subtitle: 'academic excellence.',
-            p1: 'I am currently a Professor of English Literature at Misr University for Science and Technology. My journey in academia has been driven by a relentless passion for unlocking the nuances of language and culture.',
-            p2: 'With a PhD in English Literature granted with Distinction from Ain Shams University, I have spent the last two decades not just teaching, but mentoring the next generation of scholars. My roles have evolved from Demonstrator to Head of Department and Vice Dean, giving me a holistic view of the academic landscape.',
-            p3: 'Beyond the lecture hall, I am deeply committed to Translation, Editing, and Public Relations. I believe in the power of words to bridge communities and foster understanding.',
+            p1: 'I am an academic, storyteller, and educator with a deep belief in the power of words to heal, inspire, and connect. With years of experience in teaching English literature and leading academic initiatives, my work bridges scholarship and humanity—combining rigorous thinking with empathy and creativity.',
+            p2: 'I am deeply committed to social service, particularly to supporting students with special needs, and I believe that education becomes truly meaningful when it is inclusive, compassionate, and accessible to all. Beyond the classroom, I explore storytelling, voice, and reflection through audio and visual projects that speak to the quiet truths of everyday life.',
+            p3: 'Whether I am mentoring students, designing curricula, or sharing stories, my purpose remains the same: to create meaningful spaces for learning, expression, and growth.',
             openWork: 'Open to Opportunities',
-            seeking: 'Seeking New Challenges',
-            seekingDesc: 'I am looking for a job that meets my passion in academia, Translation, Editing, Public Relations and community service. I am open to roles in 6th of October or nearby areas.',
+            seeking: 'Potential Roles & Career Opportunities',
+            seekingDesc: [
+                'University teaching in English language and literature',
+                'Academic leadership and departmental roles',
+                'Curriculum and program development',
+                'Academic and student advising',
+                'Inclusive education initiatives and support for students with special needs',
+                'Design and delivery of training and capacity-building programs',
+                'Cultural and media work (content creation, podcasting, storytelling)',
+                'Community-based and non-profit initiatives',
+                'Academic and educational consultancy',
+                'Management of educational and cultural projects'
+            ],
             contactBtn: 'Contact for Roles',
             phd: 'PhD',
             distinction: 'Distinction Grade',
@@ -31,19 +42,30 @@ const About: React.FC<AboutProps> = ({ lang }) => {
         },
         ar: {
             coreCompetencies: 'المهارات الأساسية',
-            lit: 'الأدب الإنجليزي',
-            trans: 'الترجمة (إنجليزي/عربي)',
-            edit: 'التحرير الأكاديمي',
-            pr: 'العلاقات العامة',
-            aboutHeader: 'عن البروفيسورة',
+            lit: 'التدريس الجامعي',
+            trans: 'التعليم الدامج',
+            edit: 'العمل الثقافي والإعلامي',
+            pr: 'القيادة الأكاديمية',
+            aboutHeader: 'نبذة تعريفية',
             title: '',
             subtitle: 'التميز الأكاديمي.',
-            p1: 'أعمل حاليًا كأستاذة للأدب الإنجليزي في جامعة مصر للعلوم والتكنولوجيا. رحلتي في الأوساط الأكاديمية كانت مدفوعة بشغف لا هوادة فيه لكشف الفروق الدقيقة في اللغة والثقافة.',
-            p2: 'مع حصولي على الدكتوراه في الأدب الإنجليزي بامتياز من جامعة عين شمس، أمضيت العقدين الماضيين ليس فقط في التدريس، بل في توجيه الجيل القادم من الباحثين. تطورت أدواري من معيد إلى رئيس قسم ووكيل كلية، مما منحني نظرة شاملة للمشهد الأكاديمي.',
-            p3: 'خارج قاعات المحاضرات، أنا ملتزمة بشدة بالترجمة، التحرير، والعلاقات العامة. أؤمن بقوة الكلمات في ربط المجتمعات وتعزيز التفاهم.',
+            p1: 'اعمل بالمجال الأكاديمي واعتبره مساحة للمعرفة والإنسانية معًا. وبحكم عملي في تدريس الأدب الإنجليزي والبحث العلمي، أؤمن بأن اللغة ليست أداة للتعبير فقط، بل وسيلة للفهم والتغيير.',
+            p2: 'يتقاطع عملي الأكاديمي مع شغفي بالسرد القصصي والمشروعات الإبداعية، كما يمتد إلى العمل المجتمعي ودعم الطلاب من ذوي الاحتياجات الخاصة، إيمانًا بأهمية التعليم الدامج الذي يراعي الفروق الفردية ويمنح الجميع فرصًا متكافئة للتعلّم والنمو.',
+            p3: 'وإلى جانب ذلك، أقدم محتوى صوتيًا وبصريًا يلتقط التفاصيل الإنسانية الهادئة، ويسعى إلى خلق مساحات للتأمل والحوار. وفي جوهر جميع هذه المسارات، يظل هدفي هو الإسهام في بناء تجربة تعليمية وإنسانية أكثر وعيًا وعمقًا.',
             openWork: 'متاح للفرص',
-            seeking: 'البحث عن تحديات جديدة',
-            seekingDesc: 'أبحث عن وظيفة تلبي شغفي في الأوساط الأكاديمية، الترجمة، التحرير، العلاقات العامة وخدمة المجتمع. أنا منفتحة على الأدوار في مدينة السادس من أكتوبر أو المناطق المجاورة.',
+            seeking: 'الفرص والمسارات المهنية المحتملة',
+            seekingDesc: [
+                'التدريس الجامعي في الأدب الإنجليزي واللغة الإنجليزية',
+                'رئاسة الأقسام الأكاديمية أو المناصب القيادية التعليمية',
+                'تطوير المناهج والبرامج التعليمية',
+                'الإرشاد الأكاديمي والطلابي',
+                'العمل في مشروعات التعليم الدامج ودعم الطلاب من ذوي الاحتياجات الخاصة',
+                'تصميم وتنفيذ البرامج التدريبية وبناء القدرات',
+                'العمل الثقافي والإعلامي (كتابة محتوى، بودكاست، سرد قصصي)',
+                'المبادرات المجتمعية والتنموية غير الربحية',
+                'الاستشارات الأكاديمية والتربوية',
+                'إدارة المشروعات التعليمية والثقافية'
+            ],
             contactBtn: 'تواصل للفرص',
             phd: 'استاذ',
             distinction: 'مع مرتبة الشرف',
@@ -65,7 +87,7 @@ const About: React.FC<AboutProps> = ({ lang }) => {
                         <div className="sticky top-32">
                             <div className="relative aspect-[3/4] mb-8 group overflow-hidden bg-gray-100">
                                 <img
-                                    src="./images/lecture.png"
+                                    src="./images/about-photo.png"
                                     alt="Professor in Lecture"
                                     className="w-full h-full object-cover transition-all duration-700"
                                 />
@@ -119,10 +141,7 @@ const About: React.FC<AboutProps> = ({ lang }) => {
                                 {t.p2}
                             </p>
                             <p>
-                                {lang === 'en' ?
-                                    <>Beyond the lecture hall, I am deeply committed to <strong>Translation, Editing, and Public Relations</strong>. I believe in the power of words to bridge communities and foster understanding.</>
-                                    : t.p3
-                                }
+                                {t.p3}
                             </p>
                         </div>
 
@@ -136,11 +155,11 @@ const About: React.FC<AboutProps> = ({ lang }) => {
                                     <span className={`font-bold tracking-widest text-xs uppercase ${lang === 'ar' ? 'text-base' : ''}`}>{t.openWork}</span>
                                 </div>
                                 <h3 className={`text-2xl font-serif mb-4 ${lang === 'ar' ? 'font-bold' : ''}`}>{t.seeking}</h3>
-                                <p
-                                    className={`text-white/70 mb-6 leading-relaxed ${lang === 'ar' ? 'text-xl' : ''}`}
-                                >
-                                    {t.seekingDesc}
-                                </p>
+                                <ul className={`text-white/70 mb-6 leading-relaxed space-y-2 list-disc list-inside ${lang === 'ar' ? 'text-xl' : ''}`}>
+                                    {(Array.isArray(t.seekingDesc) ? t.seekingDesc : []).map((role, idx) => (
+                                        <li key={idx}>{role}</li>
+                                    ))}
+                                </ul>
                                 <a href="#contact" className={`inline-block border border-gold text-gold px-6 py-2 hover:bg-gold hover:text-ink transition-colors uppercase text-xs font-bold tracking-wider ${lang === 'ar' ? 'text-base' : ''}`}>
                                     {t.contactBtn}
                                 </a>
